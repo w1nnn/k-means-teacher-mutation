@@ -2,7 +2,7 @@
 @session_start();
 include '../config/db.php';
 
-if (!isset($_SESSION['guru'])) {
+if (!isset($_SESSION['sekolah'])) {
 ?> <script>
 		window.location = '../404.php';
 	</script>
@@ -12,9 +12,9 @@ if (!isset($_SESSION['guru'])) {
 
 
 <?php
-$id_login = @$_SESSION['guru'];
-$sql = mysqli_query($con, "SELECT * FROM tb_guru
- WHERE id_guru = '$id_login'") or die(mysqli_error($con));
+$id_login = @$_SESSION['sekolah'];
+$sql = mysqli_query($con, "SELECT * FROM tb_kebutuhan
+ WHERE id_sekolah = '$id_login'") or die(mysqli_error($con));
 $data = mysqli_fetch_array($sql);
 ?>
 
@@ -109,16 +109,16 @@ $data = mysqli_fetch_array($sql);
 					</div>
 				</div>
 				<?php
-				$nip = $data['nip'];
+				// $nip = $data['nip'];
 
-				$query = "SELECT * FROM tb_hasil_evaluasi WHERE layak='$nip' OR tidak_layak='$nip'";
-				$hasil_evaluasi = mysqli_query($con, $query);
+				// $query = "SELECT * FROM tb_hasil_evaluasi WHERE layak='$nip' OR tidak_layak='$nip'";
+				// $hasil_evaluasi = mysqli_query($con, $query);
 
-				if (!$hasil_evaluasi) {
-					die('Error: ' . mysqli_error($con));
-				}
+				// if (!$hasil_evaluasi) {
+				// 	die('Error: ' . mysqli_error($con));
+				// }
 
-				$evaluasi_sudah_dilakukan = (mysqli_num_rows($hasil_evaluasi) > 0);
+				// $evaluasi_sudah_dilakukan = (mysqli_num_rows($hasil_evaluasi) > 0);
 				?>
 
 				<div class="sidebar-menu">
@@ -131,13 +131,13 @@ $data = mysqli_fetch_array($sql);
 								<span>Dashboard</span>
 							</a>
 						</li>
-						<li class="sidebar-item">
-							<a href="?page=guru" class='sidebar-link'>
-								<i class="bi bi-person-check-fill"></i>
-								<span>Data Guru</span>
+						<!-- <li class="sidebar-item">
+							<a href="?page=kebutuhan" class='sidebar-link'>
+								<i class="bi bi-person-lines-fill"></i>
+								<span>Data Kebutuhan</span>
 							</a>
-						</li>
-						<li class="sidebar-item">
+						</li> -->
+						<!-- <li class="sidebar-item">
 							<?php if ($evaluasi_sudah_dilakukan) { ?>
 								<a href="?page=laporan" class='sidebar-link'>
 									<i class="bi bi-clipboard2-data"></i>
@@ -149,7 +149,7 @@ $data = mysqli_fetch_array($sql);
 									<span class="">Laporan</span>
 								</a>
 							<?php } ?>
-						</li>
+						</li> -->
 
 
 						<li class="sidebar-title"></li>
@@ -188,19 +188,19 @@ $data = mysqli_fetch_array($sql);
 								<a href="#" data-bs-toggle="dropdown" aria-expanded="false">
 									<div class="user-menu d-flex">
 										<div class="user-name text-end me-3">
-											<h6 class="mb-0 text-gray-600"><?= $data['nama_guru']; ?></h6>
-											<p class="mb-0 text-sm text-gray-600"><b><i>NIP : </i></b><?= $data['nip']; ?></p>
+											<h6 class="mb-0 text-gray-600"><?= $data['nama_sekolah']; ?></h6>
+											<p class="mb-0 text-sm text-gray-600"><b><i>NPSN : </i></b><?= $data['npsn']; ?></p>
 										</div>
 										<div class="user-img d-flex align-items-center">
 											<div class="avatar avatar-md">
-												<img src="../assets/img/user/<?= $data['foto'] ?>">
+												<img src="../assets/img/sekolah.jpg">
 											</div>
 										</div>
 									</div>
 								</a>
 								<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem;">
 									<li>
-										<h6 class="dropdown-header">Hello, <?= $data['nama_guru']; ?></h6>
+										<h6 class="dropdown-header">Hello, <?= $data['nama_sekolah']; ?></h6>
 									</li>
 									<!-- <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#profile" href="#"><i class="icon-mid bi bi-person me-2"></i> My
 											Profile</a></li> -->
@@ -223,23 +223,15 @@ $data = mysqli_fetch_array($sql);
 					$page = @$_GET['page'];
 					$act = @$_GET['act'];
 
-					if ($page == 'laporan') {
+					if ($page == 'kebutuhan') {
 						if ($act == '') {
-							include 'modul/laporan/data.php';
-						} elseif ($act == 'tahun') {
-							include 'modul/laporan/laporan.php';
-						}
-					} elseif ($page == 'guru') {
-						if ($act == '') {
-							include 'modul/guru/data.php';
-						} elseif ($act == 'add') {
-							include 'modul/guru/add.php';
+							include 'modul/kebutuhan/data.php';
 						} elseif ($act == 'edit') {
-							include 'modul/guru/edit.php';
-						} elseif ($act == 'del') {
-							include 'modul/guru/del.php';
-						} elseif ($act == 'proses') {
-							include 'modul/guru/proses.php';
+							include 'modul/kebutuhan/edit.php';
+						}
+					} elseif ($page == 'laporan') {
+						if ($act == 'tahun') {
+							include 'modul/laporan/laporan.php';
 						}
 					} elseif ($page == '') {
 						include 'modul/home.php';

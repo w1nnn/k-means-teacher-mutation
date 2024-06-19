@@ -9,6 +9,23 @@
     <link rel="stylesheet" href="./assets/source/styles.css" />
     <link rel="stylesheet" href="./assets/assets/compiled/css/app.css">
     <!-- <link rel="stylesheet" href="./assets/assets/compiled/css/app-dark.css"> -->
+    <style>
+        .container__left a {
+            margin: 10px 0;
+        }
+
+        .container__left .sekolah {
+            width: 312px;
+            background-image: linear-gradient(90deg, #636363 0%, #a2ab58 100%);
+            color: #fff;
+            transition: background-image 0.3s ease;
+        }
+
+        .container__left .sekolah:hover {
+            background-image: linear-gradient(109.5deg, rgba(229, 233, 177, 0.8) 11.2%, rgba(223, 205, 187, 0.8) 100.2%);
+            color: #000;
+        }
+    </style>
     <title>SPK Mutasi Guru</title>
 </head>
 
@@ -36,8 +53,9 @@
         <div class="container__left">
             <h1>SPK Mutasi Guru</h1>
             <div class="container__btn">
-                <a type="button" href="/spk_mutasi_guru_disdik_sinjai/guru.php" class="btn guru">login guru</a>
-                <a type="button" href="/spk_mutasi_guru_disdik_sinjai/admin/" class="btn admin">login Admin</a>
+                <a type="button" href="/mutasi/guru.php" class="btn btn-sm guru">Guru</a>
+                <a type="button" href="/mutasi/admin/" class="btn btn-sm admin">Dinas Pendidikan</a>
+                <a type="button" href="/mutasi/sekolah.php" class="btn btn-sm sekolah">Sekolah</a>
             </div>
         </div>
         <div class="container__right">
