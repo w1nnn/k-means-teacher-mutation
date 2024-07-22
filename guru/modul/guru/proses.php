@@ -33,12 +33,12 @@ if (isset($_POST['saveGuru'])) {
 		move_uploaded_file($_FILES['foto']['tmp_name'], "../assets/img/user/$gambar");
 		$ganti = mysqli_query($con, "UPDATE tb_guru SET foto='$gambar' WHERE id_guru='$_POST[id]' ");
 	}
-	$editGuru = mysqli_query($con, "UPDATE tb_guru SET nama_guru='$_POST[nama]', jabatan='$_POST[jabatan]', satuan_pendidikan='$_POST[satuan_pendidikan]',jenis_kelamin='$_POST[jk]' WHERE id_guru='$_POST[id]' ");
+	$editGuru = mysqli_query($con, "UPDATE tb_guru SET nama_guru='$_POST[nama]', jabatan='$_POST[jabatan]', masa_kerja='$_POST[masa_kerja]', satuan_pendidikan='$_POST[satuan_pendidikan]', jam_kerja='$_POST[jam_kerja]',jenis_kelamin='$_POST[jk]' WHERE id_guru='$_POST[id]' ");
 
 	if ($editGuru) {
 		echo "
                 <script type='text/javascript'>
-                alert('Data Berhasil Diubah');                
+                alert('Data Berhasil Di Perbarui');                
                 window.location.replace('?page=guru');
                 </script>";
 	}

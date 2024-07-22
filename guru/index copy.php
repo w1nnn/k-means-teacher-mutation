@@ -110,16 +110,16 @@ $data = mysqli_fetch_array($sql);
 					</div>
 				</div>
 				<?php
-				// $nip = $data['nip'];
+				$nip = $data['nip'];
 
-				// $query = "SELECT * FROM tb_hasil_evaluasi WHERE layak='$nip' OR tidak_layak='$nip'";
-				// $hasil_evaluasi = mysqli_query($con, $query);
+				$query = "SELECT * FROM tb_hasil_evaluasi WHERE layak='$nip' OR tidak_layak='$nip'";
+				$hasil_evaluasi = mysqli_query($con, $query);
 
-				// if (!$hasil_evaluasi) {
-				// 	die('Error: ' . mysqli_error($con));
-				// }
+				if (!$hasil_evaluasi) {
+					die('Error: ' . mysqli_error($con));
+				}
 
-				// $evaluasi_sudah_dilakukan = (mysqli_num_rows($hasil_evaluasi) > 0);
+				$evaluasi_sudah_dilakukan = (mysqli_num_rows($hasil_evaluasi) > 0);
 				?>
 
 				<div class="sidebar-menu">
@@ -139,7 +139,7 @@ $data = mysqli_fetch_array($sql);
 							</a>
 						</li>
 						<li class="sidebar-item">
-							<!-- <?php if ($evaluasi_sudah_dilakukan) { ?>
+							<?php if ($evaluasi_sudah_dilakukan) { ?>
 								<a href="?page=laporan" class='sidebar-link'>
 									<i class="bi bi-clipboard2-data"></i>
 									<span>Laporan</span>
@@ -149,7 +149,7 @@ $data = mysqli_fetch_array($sql);
 									<i class="bi bi-lock-fill"></i>
 									<span class="">Laporan Evaluasi</span>
 								</a>
-							<?php } ?> -->
+							<?php } ?>
 						</li>
 
 

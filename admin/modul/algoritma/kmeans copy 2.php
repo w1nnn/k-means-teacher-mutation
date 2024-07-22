@@ -52,69 +52,35 @@ if (isset($_POST['simpan'])) {
                                     <input class="form-control" type="hidden" name="jumlahCluster" id="jumlahCluster" autocomplete="off" value="2">
                                     <label for="maxIterasi">Jumlah Iterasi</label>
                                     <input class="form-control" type="text" name="maxIterasi" id="maxIterasi" autocomplete="off">
-                                    <button class="btn btn-primary btn-sm my-4" type="submit" name="proses" style="width: 38%;">Proses</button>
+                                    <button class="btn btn-primary btn-sm mt-4" type="submit" name="proses" style="width: 38%;">Proses</button>
 
-                                    <?php
-                                    $dataEvaluasi = mysqli_query($con, "SELECT * FROM tb_hasil_evaluasi ORDER BY tahun_evaluasi ASC");
-
-                                    $layakMutasi = [];
-                                    $tidakLayakMutasi = [];
-
-                                    foreach ($dataEvaluasi as $dE) {
-                                        if ($dE['cluster'] == '1') {
-                                            $layakMutasi[] = $dE;
-                                        } else {
-                                            $tidakLayakMutasi[] = $dE;
-                                        }
-                                    }
-                                    ?>
-
-                                    <h5 class="mt-2">Layak Mutasi</h5>
-                                    <table class="table table-striped mt-5" id="tableLayakMutasi" style="text-align: center; width: 100%;">
+                                    <table class="table table-striped mt-5" id="table1" style="text-align: center; width: 100%;">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Nama Guru</th>
-                                                <th>Tahun Evaluasi</th>
+                                                <th rowspan="2" style="text-align: center;">No</th>
+                                                <th colspan="3" style="text-align: center;">Cluster Mutasi</th>
+                                            </tr>
+                                            <tr>
+                                                <th style="text-align: center;">Layak Mutasi</th>
+                                                <th style="text-align: center;">Tidak Layak Mutasi</th>
+                                                <th style="text-align: center;">Tahun Evaluasi</th>
                                                 <th>Opsi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $no = 1; ?>
-                                            <?php foreach ($layakMutasi as $dE) : ?>
+                                            <?php
+                                            $dataEvaluasi = mysqli_query($con, "SELECT * FROM tb_hasil_evaluasi");
+                                            $no = 1;
+                                            foreach ($dataEvaluasi as $dE) :
+                                                $cluster = $dE['cluster'];
+                                            ?>
                                                 <tr>
                                                     <td><?= $no++; ?></td>
-                                                    <td><?= htmlspecialchars($dE['nama_guru']); ?></td>
+                                                    <td><?= $cluster == '1' ? htmlspecialchars($dE['nama_guru']) : ''; ?></td>
+                                                    <td><?= $cluster == '0' ? htmlspecialchars($dE['nama_guru']) : ''; ?></td>
                                                     <td><?= htmlspecialchars($dE['tahun_evaluasi']); ?></td>
                                                     <td>
-                                                        <a class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data?')" href="?page=kmeans&act=del&id=<?= $dE['id_hasil_evaluasi'] ?>">
-                                                            <i class="fas fa-trash"></i> Hapus
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-
-                                    <h5 class="mt-5">Tidak Layak Mutasi</h5>
-                                    <table class="table table-striped mt-5" id="tableTidakLayakMutasi" style="text-align: center; width: 100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama Guru</th>
-                                                <th>Tahun Evaluasi</th>
-                                                <th>Opsi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $no = 1; ?>
-                                            <?php foreach ($tidakLayakMutasi as $dE) : ?>
-                                                <tr>
-                                                    <td><?= $no++; ?></td>
-                                                    <td><?= htmlspecialchars($dE['nama_guru']); ?></td>
-                                                    <td><?= htmlspecialchars($dE['tahun_evaluasi']); ?></td>
-                                                    <td>
-                                                        <a class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data?')" href="?page=kmeans&act=del&id=<?= $dE['id_hasil_evaluasi'] ?>">
+                                                        <a class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data?')" href="?page=evaluasi&act=del&id=<?= $dE['id_evaluasi'] ?>">
                                                             <i class="fas fa-trash"></i> Hapus
                                                         </a>
                                                     </td>

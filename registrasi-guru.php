@@ -5,20 +5,31 @@ include './config/db.php';
 
 <?php
 if (isset($_POST['submit'])) {
-	// Ambil data dari form
 	$nip = $_POST['nip'];
 	$nama_guru = $_POST['nama'];
 
-	$sql = "INSERT INTO tb_guru (nip, nama_guru) VALUES ('$nip', '$nama_guru')";
+	if (preg_match('/^[0-9]{18}$/', $nip)) {
+		$check_query = mysqli_query($con, "SELECT COUNT(*) AS count FROM tb_guru WHERE nip = '$nip'");
+		$row = mysqli_fetch_assoc($check_query);
+		$count = $row['count'];
 
-	$result = mysqli_query($con, $sql);
+		if ($count > 0) {
+			echo "<script>alert('NIP sudah terdaftar dalam database'); window.location.href = 'registrasi-guru.php';</script>";
+		} else {
+			$sql = "INSERT INTO tb_guru (nip, nama_guru) VALUES ('$nip', '$nama_guru')";
+			$result = mysqli_query($con, $sql);
 
-	if ($result) {
-		echo "<script>alert('Data guru berhasil ditambahkan'); window.location.href = 'guru.php';</script>";
+			if ($result) {
+				echo "<script>alert('Data guru berhasil ditambahkan'); window.location.href = 'guru.php';</script>";
+			} else {
+				echo "<script>alert('Terjadi kesalahan saat menambah data guru');</script>";
+			}
+		}
 	} else {
-		echo "<script>alert('Terjadi kesalahan saat menambah data guru');</script>";
+		echo "<script>alert('NIP harus terdiri dari 18 angka dan hanya boleh berisi angka');</script>";
 	}
 }
+
 ?>
 
 
@@ -68,7 +79,7 @@ if (isset($_POST['submit'])) {
 			<div class="card">
 				<div class="card-header">
 					<img src="./assets/source/logo.png" alt="Logo" style="width: 100px; height: auto; display: block; margin: 0 auto;">
-					<h2 class="card-title text-center">Registrasi</h2>
+					<h2 class="card-title text-center">Daftar</h2>
 				</div>
 				<div class="card-content">
 					<div class="card-body">
@@ -89,12 +100,12 @@ if (isset($_POST['submit'])) {
 										</div>
 									</div>
 									<div class="col-md-4">
-										<label for="password-horizontal-icon">Nama dan Gelar</label>
+										<label for="password-horizontal-icon">Nama</label>
 									</div>
 									<div class="col-md-8">
 										<div class="form-group has-icon-left">
 											<div class="position-relative">
-												<input type="text" autocomplete="off" name="nama" class="form-control" placeholder="Nama Guru" id="password-horizontal-icon">
+												<input type="text" autocomplete="off" name="nama" class="form-control" placeholder="Nama dan Gelar" id="password-horizontal-icon">
 												<div class="form-control-icon">
 													<i class="bi bi-person"></i>
 												</div>

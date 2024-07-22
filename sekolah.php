@@ -11,6 +11,7 @@ if (isset($_POST['submit'])) {
 
     if ($jml > 0) {
         $_SESSION['sekolah'] = $d['id_sekolah'];
+        $_SESSION['npsn'] = $d['npsn'];
         echo "
         <script>
          alert('Login Berhasil');

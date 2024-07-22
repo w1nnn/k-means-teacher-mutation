@@ -1,6 +1,3 @@
-<?php
-$hasilEvaluasi = mysqli_query($con, "SELECT * FROM tb_hasil_evaluasi ORDER BY tahun DESC");
-?>
 <div class="page-inner">
     <div class="row">
         <section class="section">
@@ -16,26 +13,97 @@ $hasilEvaluasi = mysqli_query($con, "SELECT * FROM tb_hasil_evaluasi ORDER BY ta
                                 <button name="btn" class="btn btn-info btn-sm" type="submit" id="button-addon1">Cetak Tahun</button>
                             </div>
                         </form>
-                        <table class="table table-striped" id="laporan">
+                        <?php
+                        $dataEvaluasi = mysqli_query($con, "SELECT * FROM tb_hasil_evaluasi ORDER BY tahun_evaluasi ASC");
+
+                        $layakMutasi = [];
+                        $tidakLayakMutasi = [];
+
+                        foreach ($dataEvaluasi as $dE) {
+                            if ($dE['cluster'] == '1') {
+                                $layakMutasi[] = $dE;
+                            } else {
+                                $tidakLayakMutasi[] = $dE;
+                            }
+                        }
+
+                        $jumlahLayakMutasi = count($layakMutasi);
+                        $jumlahTidakLayakMutasi = count($tidakLayakMutasi);
+                        ?>
+
+                        <!-- <h5 class="mt-2">Layak Mutasi</h5>
+                        <table class="table table-striped mt-5" id="tableLayakMutasi" style="text-align: center; width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Layak Mutasi</th>
-                                    <th>Tidak Layak Mutasi</th>
-                                    <th>Tahun Mutasi</th>
+                                    <th>No</th>
+                                    <th>NIP</th>
+                                    <th>Nama Guru</th>
+                                    <th>Satuan Pendidikan</th>
+                                    <th>Jabatan</th>
+                                    <th>Masa Kerja</th>
+                                    <th>Jam Kerja</th>
+                                    <th>Foto</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($hasilEvaluasi as $no => $hasil) : ?>
-                                    <tr>
-                                        <td><?= $no + 1; ?>.</td>
-                                        <td><?= $hasil['layak']; ?></td>
-                                        <td><?= $hasil['tidak_layak']; ?></td>
-                                        <td><?= $hasil['tahun']; ?></td>
-                                    </tr>
+                                <?php $no = 1; ?>
+                                <?php foreach ($layakMutasi as $dE) : ?>
+                                    <?php
+                                    $namaGuru = htmlspecialchars($dE['nama_guru']);
+                                    $dataGuru = mysqli_query($con, "SELECT * FROM tb_guru WHERE nama_guru = '$namaGuru'");
+                                    while ($dG = mysqli_fetch_array($dataGuru)) {
+                                        echo '<tr>
+                                            <td>' . $no++ . '</td>
+                                            <td>' . $dG['nip'] . '</td>
+                                            <td>' . $dG['nama_guru'] . '</td>
+                                            <td>' . $dG['satuan_pendidikan'] . '</td>
+                                            <td>' . $dG['jabatan'] . '</td>
+                                            <td>' . $dG['masa_kerja'] . ' Tahun' . '</td>
+                                            <td>' . $dG['jam_kerja'] . ' Jam' . '</td>
+                                            <td>
+                                                <img src="../assets/img/user/' . $dG['foto'] . '" alt="Foto Guru" width="40px">
+                                            </td>
+                                        </tr>';
+                                    }
+                                    ?>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+
+                        <h5 class="mt-5">Tidak Layak Mutasi</h5>
+                        <table class="table table-striped mt-5" id="tableTidakLayakMutasi" style="text-align: center; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Guru</th>
+                                    <th>Tahun Evaluasi</th>
+                                    <th>Opsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $no = 1; ?>
+                                <?php foreach ($tidakLayakMutasi as $dE) : ?>
+                                    <?php
+                                    $namaGuru = htmlspecialchars($dE['nama_guru']);
+                                    $dataGuru = mysqli_query($con, "SELECT * FROM tb_guru WHERE nama_guru = '$namaGuru'");
+                                    while ($dG = mysqli_fetch_array($dataGuru)) {
+                                        echo '<tr>
+                                            <td>' . $no++ . '</td>
+                                            <td>' . $dG['nip'] . '</td>
+                                            <td>' . $dG['nama_guru'] . '</td>
+                                            <td>' . $dG['satuan_pendidikan'] . '</td>
+                                            <td>' . $dG['jabatan'] . '</td>
+                                            <td>' . $dG['masa_kerja'] . ' Tahun' . '</td>
+                                            <td>' . $dG['jam_kerja'] . ' Jam' . '</td>
+                                            <td>
+                                                <img src="../assets/img/user/' . $dG['foto'] . '" alt="Foto Guru" width="40px">
+                                            </td>
+                                        </tr>';
+                                    }
+                                    ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table> -->
                     </div>
                 </div>
             </div>

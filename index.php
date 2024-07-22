@@ -43,7 +43,7 @@
         </div>
         <ul class="nav__links" id="nav-links">
             <li><a href="#">HOME</a></li>
-            <li><a href="/spk_mutasi_guru_disdik_sinjai/about.php">ABOUT US</a></li>
+            <li><a href="/mutasi/about.php">ABOUT US</a></li>
         </ul>
         <div class="nav__btns">
             <!-- <button class="btn"><i class="bi bi-geo-alt-fill"></i></button> -->

@@ -17,7 +17,7 @@ if (isset($_POST['saveGuru'])) {
 		$nama_gambar = @$_FILES['foto']['name'];
 		$pindah = move_uploaded_file($sumber, $target . $nama_gambar);
 		if ($pindah) {
-			$save = mysqli_query($con, "INSERT INTO tb_guru VALUES(NULL,'$_POST[nip]','$_POST[nama]', '$_POST[jabatan]','$_POST[satuan_pendidikan]','$_POST[jk]','$nama_gambar')");
+			$save = mysqli_query($con, "INSERT INTO tb_guru VALUES(NULL,'$_POST[nip]','$_POST[nama]', '$_POST[jabatan]', '$_POST[masa_kerja]', '$_POST[satuan_pendidikan]', '$_POST[jam_kerja]','$_POST[jk]','$nama_gambar')");
 			if ($save) {
 				echo "
                     <script type='text/javascript'>
@@ -33,7 +33,7 @@ if (isset($_POST['saveGuru'])) {
 		move_uploaded_file($_FILES['foto']['tmp_name'], "../assets/img/user/$gambar");
 		$ganti = mysqli_query($con, "UPDATE tb_guru SET foto='$gambar' WHERE id_guru='$_POST[id]' ");
 	}
-	$editGuru = mysqli_query($con, "UPDATE tb_guru SET nama_guru='$_POST[nama]', jabatan='$_POST[jabatan]', satuan_pendidikan='$_POST[satuan_pendidikan]',jenis_kelamin='$_POST[jk]' WHERE id_guru='$_POST[id]' ");
+	$editGuru = mysqli_query($con, "UPDATE tb_guru SET nama_guru='$_POST[nama]', jabatan='$_POST[jabatan]', masa_kerja='$_POST[masa_kerja]', satuan_pendidikan='$_POST[satuan_pendidikan]', jam_kerja='$_POST[jam_kerja]', jenis_kelamin='$_POST[jk]' WHERE id_guru='$_POST[id]' ");
 
 	if ($editGuru) {
 		echo "

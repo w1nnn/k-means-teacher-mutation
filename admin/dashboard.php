@@ -133,14 +133,14 @@ $data = mysqli_fetch_array($sql);
                             </a>
 
                         </li>
-                        <!-- 
+
                         <li class="sidebar-item">
                             <a href="?page=kebutuhan" class='sidebar-link'>
                                 <i class="bi bi-clipboard-plus-fill"></i>
                                 <span>Analisis Kebutuhan</span>
                             </a>
 
-                        </li> -->
+                        </li>
 
                         <li class="sidebar-item has-sub">
                             <a href="#" class='sidebar-link'>
@@ -316,8 +316,8 @@ $data = mysqli_fetch_array($sql);
                     } elseif ($page == 'kmeans') {
                         if ($act == '') {
                             include 'modul/algoritma/kmeans.php';
-                        } elseif ($act == 'proses') {
-                            include 'modul/algoritma/proses.php';
+                        } elseif ($act == 'del') {
+                            include 'modul/algoritma/del.php';
                         }
                         // Laporan
                     } elseif ($page == 'laporan') {
@@ -509,39 +509,76 @@ $data = mysqli_fetch_array($sql);
             }, 5000);
         }
 
-        $('#example').DataTable({
+        $('#guru').DataTable({
             dom: 'Bfrtip',
             pageLength: 5,
             buttons: [{
                     extend: 'csv',
                     text: 'CSV',
-                    title: 'Data Guru',
+                    title: '<div class="text-center mt-4"><h3>Data Guru</h3></div>',
                     exportOptions: {
-                        columns: ':visible:not(:last-child)'
+                        columns: [0, 1, 2, 3, 4, 5, 6] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
                     }
                 },
                 {
                     extend: 'excel',
                     text: 'Excel',
-                    title: 'Data Guru',
+                    title: '<div class="text-center mt-4"><h3>Data Guru</h3></div>',
                     exportOptions: {
-                        columns: ':visible:not(:last-child)'
+                        columns: [0, 1, 2, 3, 4, 5, 6] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
                     }
                 },
                 {
                     extend: 'pdf',
                     text: 'PDF',
-                    title: 'Data Guru',
+                    title: '<div class="text-center mt-4"><h3>Data Guru</h3></div>',
                     exportOptions: {
-                        columns: ':visible:not(:last-child)'
+                        columns: [0, 1, 2, 3, 4, 5, 6] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
                     }
                 },
                 {
                     extend: 'print',
                     text: 'Print',
-                    title: 'Data Guru',
+                    title: '<div class="text-center mt-4"><h3>Data Guru</h3></div>',
                     exportOptions: {
-                        columns: ':visible:not(:last-child)'
+                        columns: [0, 1, 2, 3, 4, 5, 6] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
+                    }
+                }
+            ]
+        });
+        $('#kebutuhan-sekolah').DataTable({
+            dom: 'Bfrtip',
+            pageLength: 5,
+            buttons: [{
+                    extend: 'csv',
+                    text: 'CSV',
+                    title: '<div class="text-center mt-4"><h3>Kebutuhan Sekolah</h3></div>',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+                    title: '<div class="text-center mt-4"><h3>Kebutuhan Sekolah</h3></div>',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF',
+                    title: '<div class="text-center mt-4"><h3>Kebutuhan Sekolah</h3></div>',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    title: '<div class="text-center mt-4"><h3>Kebutuhan Sekolah</h3></div>',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
                     }
                 }
             ]
@@ -619,6 +656,43 @@ $data = mysqli_fetch_array($sql);
                 }
             ]
         });
+        $('#evaluasi').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'csv',
+                    text: 'CSV',
+                    title: '<div class="text-center mt-4"><h3>Data Evaluasi</h3></div>',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4] // Menentukan kolom yang ingin diekspor (misalnya kolom 0 hingga 4)
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+                    title: '<div class="text-center mt-4"><h3>Data Evaluasi</h3></div>',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF',
+                    title: '<div class="text-center mt-4"><h3>Data Evaluasi</h3></div>',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    title: '<div class="text-center mt-4"><h3>Data Evaluasi</h3></div>',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                }
+            ]
+        });
+
         $('#hasil_cluster').DataTable({
             dom: 'Bfrtip',
             pageLength: 4,
@@ -707,7 +781,7 @@ $data = mysqli_fetch_array($sql);
             },
         };
         let optionsVisitorsProfile = {
-            series: [<?= $jumlah_layak ?>, <?= $jumlah_tidak_layak ?>],
+            series: [<?= $jumlahLayakMutasi ?>, <?= $jumlahTidakLayakMutasi ?>],
             labels: ["Layak Mutasi", "Tidak Layak Mutasi"],
             colors: ["#435ebe", "#a3cef1"],
             chart: {

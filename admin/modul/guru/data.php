@@ -6,15 +6,17 @@
           <h5 class="card-title">Daftar Guru</h5>
           <a href="?page=guru&act=add" class="btn icon btn-primary btn-sm text-white"><i class="bi bi-plus"></i> Tambah</a>
         </div>
-        <div class="card-body">
-          <table class="table table-striped" id="example">
+        <div class="card-body table-responsive">
+          <table class="table table-striped" id="guru">
             <thead>
               <tr>
                 <th>#</th>
                 <th>Nip</th>
                 <th>Nama</th>
                 <th>Jabatan</th>
+                <th>Masa Kerja</th>
                 <th>Satuan Pendidikan</th>
+                <th>Jam Kerja</th>
                 <th>Jenis Kelamin</th>
                 <th>Foto</th>
                 <th>Opsi</th>
@@ -31,7 +33,9 @@
                   <td><?= $g['nip']; ?></td>
                   <td><?= $g['nama_guru']; ?></td>
                   <td><?= $g['jabatan']; ?></td>
+                  <td><?= $g['masa_kerja']; ?> Tahun</td>
                   <td><?= $g['satuan_pendidikan']; ?></td>
+                  <td><?= $g['jam_kerja']; ?> Jam</td>
                   <td><?= $g['jenis_kelamin']; ?></td>
 
                   <td>

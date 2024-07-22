@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
                     <h3 class="h4">Form Edit Analisis Kebutuhan Sekolah</h3>
                 </div>
                 <div class="card-body">
-                    <form action="?page=alternatif&act=proses" method="post" enctype="multipart/form-data">
+                    <form action="?page=kebutuhan&act=proses" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="<?= $data['id_sekolah'] ?>">
                         <div class="form-group">
                             <label>NPSN</label>

@@ -36,3 +36,28 @@ if (isset($_POST['saveHasilEvaluasi'])) {
           window.location.replace('?page=kmeans');
           </script>";
 }
+?>
+<table class="table table-striped mt-5" id="table1" style="text-align: center; width: 100%;">
+    <thead>
+        <tr>
+            <th rowspan="2" style="text-align: center;">Nama Guru</th>
+            <th colspan="3" style="text-align: center;">Nilai Kriteria</th>
+        </tr>
+        <tr>
+            <th style="text-align: center;">Masa Kerja</th>
+            <th style="text-align: center;">Jam Kerja</th>
+            <th style="text-align: center;">Proses Pembelajaran</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $dataEvaluasi = mysqli_query($con, "SELECT * FROM tb_evaluasi"); ?>
+        <?php foreach ($dataEvaluasi as $data) : ?>
+            <tr>
+                <td style="text-align: left;"><?= $data['nama_guru']; ?></td>
+                <td><?= $data['masa_kerja']; ?></td>
+                <td><?= $data['jam_kerja']; ?></td>
+                <td><?= $data['proses_pembelajaran']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>

@@ -1,32 +1,3 @@
-<?php
-if (isset($_POST['simpan'])) {
-    $iterasi = intval($_POST['pilih_iterasi']);
-
-    $nama_guru = json_decode($_POST['nama_guru'][$iterasi], true);
-    $cluster = json_decode($_POST['cluster'][$iterasi], true);
-    $euclidean = json_decode($_POST['euclidean'][$iterasi], true);
-    $tahunSekarang = date('Y');
-
-
-    for ($i = 0; $i < count($nama_guru); $i++) {
-        $cek = mysqli_query($con, "SELECT * FROM tb_hasil_evaluasi WHERE nama_guru = '$nama_guru[$i]'");
-        if (mysqli_num_rows($cek) > 0) {
-            continue;
-        } else {
-            $insert = mysqli_query($con, "INSERT INTO tb_hasil_evaluasi (nama_guru, cluster, euclidean, tahun_evaluasi) VALUES ('$nama_guru[$i]', '$cluster[$i]', '$euclidean[$i]', '$tahunSekarang')");
-
-            if ($insert) {
-                echo "<script>alert('Data berhasil disimpan!')</script>";
-                echo "<script>document.location.href = '?page=kmeans'</script>";
-            } else {
-                echo "<script>alert('Data gagal disimpan!')</script>";
-                echo "<script>document.location.href = '?page=kmeans'</script>";
-            }
-        }
-    }
-}
-?>
-
 <form action="" method="POST">
     <div class="row">
         <div class="col-md-12">
@@ -49,80 +20,11 @@ if (isset($_POST['simpan'])) {
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div class="row mt-5">
                                 <div class="col-md-12">
+                                    <!-- <label for="jumlahCluster">Jumlah Cluster</label> -->
                                     <input class="form-control" type="hidden" name="jumlahCluster" id="jumlahCluster" autocomplete="off" value="2">
-                                    <label for="maxIterasi">Jumlah Iterasi</label>
+                                    <label for="maxIterasi">Max Iterasi</label>
                                     <input class="form-control" type="text" name="maxIterasi" id="maxIterasi" autocomplete="off">
-                                    <button class="btn btn-primary btn-sm my-4" type="submit" name="proses" style="width: 38%;">Proses</button>
-
-                                    <?php
-                                    $dataEvaluasi = mysqli_query($con, "SELECT * FROM tb_hasil_evaluasi ORDER BY tahun_evaluasi ASC");
-
-                                    $layakMutasi = [];
-                                    $tidakLayakMutasi = [];
-
-                                    foreach ($dataEvaluasi as $dE) {
-                                        if ($dE['cluster'] == '1') {
-                                            $layakMutasi[] = $dE;
-                                        } else {
-                                            $tidakLayakMutasi[] = $dE;
-                                        }
-                                    }
-                                    ?>
-
-                                    <h5 class="mt-2">Layak Mutasi</h5>
-                                    <table class="table table-striped mt-5" id="tableLayakMutasi" style="text-align: center; width: 100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama Guru</th>
-                                                <th>Tahun Evaluasi</th>
-                                                <th>Opsi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $no = 1; ?>
-                                            <?php foreach ($layakMutasi as $dE) : ?>
-                                                <tr>
-                                                    <td><?= $no++; ?></td>
-                                                    <td><?= htmlspecialchars($dE['nama_guru']); ?></td>
-                                                    <td><?= htmlspecialchars($dE['tahun_evaluasi']); ?></td>
-                                                    <td>
-                                                        <a class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data?')" href="?page=kmeans&act=del&id=<?= $dE['id_hasil_evaluasi'] ?>">
-                                                            <i class="fas fa-trash"></i> Hapus
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-
-                                    <h5 class="mt-5">Tidak Layak Mutasi</h5>
-                                    <table class="table table-striped mt-5" id="tableTidakLayakMutasi" style="text-align: center; width: 100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama Guru</th>
-                                                <th>Tahun Evaluasi</th>
-                                                <th>Opsi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $no = 1; ?>
-                                            <?php foreach ($tidakLayakMutasi as $dE) : ?>
-                                                <tr>
-                                                    <td><?= $no++; ?></td>
-                                                    <td><?= htmlspecialchars($dE['nama_guru']); ?></td>
-                                                    <td><?= htmlspecialchars($dE['tahun_evaluasi']); ?></td>
-                                                    <td>
-                                                        <a class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data?')" href="?page=kmeans&act=del&id=<?= $dE['id_hasil_evaluasi'] ?>">
-                                                            <i class="fas fa-trash"></i> Hapus
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-
+                                    <button class="btn btn-primary btn-sm mt-4" type="submit" name="proses" style="width: 38%;">Proses</button>
                                 </div>
                             </div>
                         </div>
@@ -234,11 +136,13 @@ if (isset($_POST['simpan'])) {
                                         ];
                                     }
 
+                                    // Perform K-Means clustering
                                     $iterasi_table = [];
                                     for ($iterasi = 0; $iterasi < $maxIterasi; $iterasi++) {
                                         $euclidean = euclideanDistance($data, $centroid);
                                         $centroid = centroid($data, $euclidean, $jumlahCluster);
 
+                                        // Store results for iteration display
                                         $iterasi_table[$iterasi]['centroid'] = $centroid;
                                         $iterasi_table[$iterasi]['euclidean'] = $euclidean;
                                     }
@@ -246,14 +150,17 @@ if (isset($_POST['simpan'])) {
                                     return $iterasi_table;
                                 }
 
+                                // Perform K-Means clustering
                                 $hasilKMeans = kmeans($data, $jumlahCluster, $maxIterasi);
 
+                                // Display results in a table
                                 echo '<div class="table-responsive">';
                                 foreach ($hasilKMeans as $iterasi => $hasil) {
                                     echo '<div class="mt-5">';
-                                    echo '<button class="btn btn-primary btn-sm mt-4 mb-3" type="submit" name="simpan" style="width: 20%;">Simpan</button>';
+                                    echo '<div class="alert alert-primary text-center"><i class="bi bi-check-circle"></i> Iterasi ' . ($iterasi + 1) . '</div>';
 
-                                    echo '<table class="table table-striped" id="table2">';
+                                    // Tabel untuk centroids
+                                    echo '<table class="table table-striped">';
                                     echo '<thead>';
                                     echo '<tr>';
                                     echo '<th>Centroid</th>';
@@ -274,6 +181,7 @@ if (isset($_POST['simpan'])) {
                                     echo '</tbody>';
                                     echo '</table>';
 
+                                    // Tabel untuk data cluster
                                     echo '<table class="table table-striped">';
                                     echo '<thead>';
                                     echo '<tr>';
@@ -283,28 +191,19 @@ if (isset($_POST['simpan'])) {
                                     echo '</tr>';
                                     echo '</thead>';
                                     echo '<tbody>';
-                                    echo '<div class="alert alert-info text-center"><i class="bi bi-check-circle"></i> Iterasi ' . ($iterasi + 1) . '</div>';
-                                    echo '<label class="my-3"><input required class="form-check-input" type="radio" name="pilih_iterasi" value="' . $iterasi . '"> Pilih Iterasi ' . ($iterasi + 1) . '</label>';
                                     foreach ($hasil['euclidean'] as $dataKey => $dataVal) {
                                         $nama_guru = $data[$dataKey]['nama_guru'];
-                                        $nip = $data[$dataKey]['nip'];
                                         echo '<tr>';
-                                        echo '<td><input type="text" readonly class="form-control" name="nama_guru[' . $iterasi . '][]" value="' . $nama_guru . '"></td>';
-                                        echo '<td><input type="text" readonly class="form-control" name="cluster[' . $iterasi . '][]" value="' . ($dataVal['cluster'] + 1) . '"></td>';
-                                        echo '<td><input type="text" readonly class="form-control" name="euclidean[' . $iterasi . '][]" value="' . $dataVal['euclidean'] . '"></td>';
+                                        echo '<td>' . $nama_guru . '</td>';
+                                        echo '<td>Cluster ' . ($dataVal['cluster'] + 1) . '</td>';
+                                        echo '<td>' . number_format($dataVal['euclidean'], 2) . '</td>';
                                         echo '</tr>';
                                     }
                                     echo '</tbody>';
                                     echo '</table>';
 
-                                    echo '<input type="hidden" name="nama_guru[' . $iterasi . ']" value="' . htmlspecialchars(json_encode(array_column($data, 'nama_guru'))) . '">';
-                                    echo '<input type="hidden" name="nip[' . $iterasi . ']" value="' . htmlspecialchars(json_encode(array_column($data, 'nip'))) . '">';
-                                    echo '<input type="hidden" name="cluster[' . $iterasi . ']" value="' . htmlspecialchars(json_encode(array_column($hasil['euclidean'], 'cluster'))) . '">';
-                                    echo '<input type="hidden" name="euclidean[' . $iterasi . ']" value="' . htmlspecialchars(json_encode(array_column($hasil['euclidean'], 'euclidean'))) . '">';
-
                                     echo '</div>';
                                 }
-
                                 echo '</div>';
                             }
                             ?>

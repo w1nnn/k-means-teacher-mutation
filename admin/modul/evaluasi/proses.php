@@ -1,41 +1,41 @@
 <?php
 if (isset($_POST['saveEvaluasi'])) {
-    $nip = $_POST['nip'];
+    $nama_guru = $_POST['nama_guru'];
+    $jabatan = $_POST['jabatan'];
     $masa_kerja = $_POST['masa_kerja'];
-    $proses_mengajar = $_POST['proses_mengajar'];
-    $jam_mengajar = $_POST['jam_mengajar'];
-    $kebutuhan_sekolah = $_POST['kebutuhan_sekolah'];
+    $jam_kerja = $_POST['jam_kerja'];
+    $proses_pembelajaran = $_POST['proses_pembelajaran'];
 
-    $cekNIPQuery = "SELECT * FROM tb_evaluasi WHERE nip='$nip'";
-    $cekNIP = mysqli_query($con, $cekNIPQuery);
-    $jumlahNIP = mysqli_num_rows($cekNIP);
+    // $cekNIPQuery = "SELECT * FROM tb_evaluasi WHERE id_eval='$nip'";
+    // $cekNIP = mysqli_query($con, $cekNIPQuery);
+    // $jumlahNIP = mysqli_num_rows($cekNIP);
 
-    if ($jumlahNIP > 0) {
+    // if ($jumlahNIP > 0) {
+    //     echo "
+    //         <script type='text/javascript'>
+    //         alert('NIP sudah ada dalam tabel evaluasi. Silakan gunakan NIP lain.');
+    //         window.location.replace('?page=evaluasi');
+    //         </script>";
+    // } else {
+    $insertQuery = "INSERT INTO tb_evaluasi (nama_guru, jabatan, masa_kerja, jam_kerja, proses_pembelajaran) 
+                        VALUES ('$nama_guru', '$jabatan', '$masa_kerja', '$jam_kerja', '$proses_pembelajaran')";
+
+    $insert = mysqli_query($con, $insertQuery);
+
+    if ($insert) {
         echo "
-            <script type='text/javascript'>
-            alert('NIP sudah ada dalam tabel evaluasi. Silakan gunakan NIP lain.');
-            window.location.replace('?page=evaluasi');
-            </script>";
-    } else {
-        $insertQuery = "INSERT INTO tb_evaluasi (nip, masa_kerja, proses_mengajar, jam_kerja, kebutuhan_sekolah) 
-                        VALUES ('$nip', '$masa_kerja', '$proses_mengajar', '$jam_mengajar', '$kebutuhan_sekolah')";
-
-        $insert = mysqli_query($con, $insertQuery);
-
-        if ($insert) {
-            echo "
                 <script type='text/javascript'>
                 alert('Data Berhasil Disimpan');
                 window.location.replace('?page=evaluasi');
                 </script>";
-        } else {
-            echo "
+    } else {
+        echo "
                 <script type='text/javascript'>
                 alert('Data Gagal Disimpan');
                 window.location.replace('?page=evaluasi');
                 </script>";
-        }
     }
+    // }
 } else if (isset($_POST['updateEvaluasi'])) {
     $id_evaluasi = $_POST['id'] ?? '';
     $nip = $_POST['nip'];

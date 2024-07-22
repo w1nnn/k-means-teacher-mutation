@@ -9,16 +9,24 @@ if (isset($_POST['submit'])) {
 	$nama_sekolah = $_POST['nama'];
 	$kecamatan = $_POST['kecamatan'];
 
-	$sql = "INSERT INTO tb_kebutuhan (npsn, nama_sekolah, kecamatan) VALUES ('$npsn', '$nama_sekolah', '$kecamatan')";
+	$check_query = mysqli_query($con, "SELECT COUNT(*) AS count FROM tb_kebutuhan WHERE npsn = '$npsn'");
+	$row = mysqli_fetch_assoc($check_query);
+	$count = $row['count'];
 
-	$result = mysqli_query($con, $sql);
-
-	if ($result) {
-		echo "<script>alert('Data sekolah berhasil ditambahkan'); window.location.href = 'sekolah.php';</script>";
+	if ($count > 0) {
+		echo "<script>alert('NPSN sudah terdaftar dalam database'); window.location.href = 'registrasi-sekolah.php';</script>";
 	} else {
-		echo "<script>alert('Terjadi kesalahan saat menambah data guru');</script>";
+		$sql = "INSERT INTO tb_kebutuhan (npsn, nama_sekolah, kecamatan) VALUES ('$npsn', '$nama_sekolah', '$kecamatan')";
+		$result = mysqli_query($con, $sql);
+
+		if ($result) {
+			echo "<script>alert('Data sekolah berhasil ditambahkan'); window.location.href = 'sekolah.php';</script>";
+		} else {
+			echo "<script>alert('Terjadi kesalahan saat menambah data guru');</script>";
+		}
 	}
 }
+
 ?>
 
 
@@ -69,7 +77,7 @@ if (isset($_POST['submit'])) {
 				<div class="card">
 					<div class="card-header">
 						<img src="./assets/source/logo.png" alt="Logo" style="width: 100px; height: auto; display: block; margin: 0 auto;">
-						<h2 class="card-title text-center">Registrasi</h2>
+						<h2 class="card-title text-center">Daftar</h2>
 					</div>
 					<div class="card-content">
 						<div class="card-body">
@@ -84,35 +92,35 @@ if (isset($_POST['submit'])) {
 									<div class="col-md-6 col-12">
 										<div class="form-group">
 											<label for="last-name-column">Nama Sekolah</label>
-											<input type="text" id="last-name-column" class="form-control" placeholder="Nama Sekolah" name="nama">
+											<input type="text" id="last-name-column" class="form-control" placeholder="Nama Sekolah" name="nama" readonly>
 										</div>
 									</div>
 									<div class="col-md-6 col-12">
 										<div class="form-group">
 											<label for="city-column">Provinsi</label>
-											<input type="text" id="city-column" class="form-control" placeholder="Provinsi" name="provinsi">
+											<input type="text" id="city-column" class="form-control" placeholder="Provinsi" name="provinsi" readonly>
 										</div>
 									</div>
 									<div class="col-md-6 col-12">
 										<div class="form-group">
 											<label for="country-floating">Kab/Kota</label>
-											<input type="text" id="country-floating" class="form-control" name="kabupaten" placeholder="Kab/Kota">
+											<input type="text" id="country-floating" class="form-control" name="kabupaten" placeholder="Kab/Kota" readonly>
 										</div>
 									</div>
 									<div class="col-md-6 col-12">
 										<div class="form-group">
 											<label for="company-column">Kecamatan</label>
-											<input type="text" id="company-column" class="form-control" name="kecamatan" placeholder="Kecamatan">
+											<input type="text" id="company-column" class="form-control" name="kecamatan" placeholder="Kecamatan" readonly>
 										</div>
 									</div>
 									<div class="col-md-6 col-12">
 										<div class="form-group">
 											<label for="email-id-column">Alamat</label>
-											<input type="text" id="email-id-column" class="form-control" name="alamat" placeholder="Alamat">
+											<input type="text" id="email-id-column" class="form-control" name="alamat" placeholder="Alamat" readonly>
 										</div>
 									</div>
 									<div class="col-12 d-flex justify-content-end">
-										<button type="submit" name="submit" class="btn btn-primary me-1 mb-1">Simpan</button>
+										<button type="submit" name="submit" class="btn btn-primary me-1 mb-1">Daftar</button>
 										<button type="reset" class="btn btn-warning me-1 mb-1">Reset</button>
 									</div>
 								</div>

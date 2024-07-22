@@ -13,6 +13,7 @@ if (!isset($_SESSION['sekolah'])) {
 
 <?php
 $id_login = @$_SESSION['sekolah'];
+$npsn = @$_SESSION['npsn'];
 $sql = mysqli_query($con, "SELECT * FROM tb_kebutuhan
  WHERE id_sekolah = '$id_login'") or die(mysqli_error($con));
 $data = mysqli_fetch_array($sql);
@@ -228,6 +229,8 @@ $data = mysqli_fetch_array($sql);
 							include 'modul/kebutuhan/data.php';
 						} elseif ($act == 'edit') {
 							include 'modul/kebutuhan/edit.php';
+						} elseif ($act == 'proses') {
+							include 'modul/kebutuhan/proses.php';
 						}
 					} elseif ($page == 'laporan') {
 						if ($act == 'tahun') {
@@ -380,6 +383,42 @@ $data = mysqli_fetch_array($sql);
 					extend: 'print',
 					text: 'Print',
 					title: 'Laporan Rekomendasi Mutasi Guru',
+				}
+			]
+		});
+		$('#guru').DataTable({
+			dom: 'Bfrtip',
+			buttons: [{
+					extend: 'csv',
+					text: 'CSV',
+					title: '<div class="text-center mt-4"><h3>Data Guru</h3></div>',
+					exportOptions: {
+						columns: [0, 1, 2, 3]
+					}
+				},
+				{
+					extend: 'excel',
+					text: 'Excel',
+					title: '<div class="text-center mt-4"><h3>Data Guru</h3></div>',
+					exportOptions: {
+						columns: [0, 1, 2, 3]
+					}
+				},
+				{
+					extend: 'pdf',
+					text: 'PDF',
+					title: '<div class="text-center mt-4"><h3>Data Guru</h3></div>',
+					exportOptions: {
+						columns: [0, 1, 2, 3]
+					}
+				},
+				{
+					extend: 'print',
+					text: 'Print',
+					title: '<div class="text-center mt-4"><h3>Data Guru</h3></div>',
+					exportOptions: {
+						columns: [0, 1, 2, 3]
+					}
 				}
 			]
 		});

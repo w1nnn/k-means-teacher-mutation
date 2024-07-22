@@ -1,5 +1,5 @@
 <?php
-$alternatif_query = mysqli_query($con, "SELECT * FROM tb_kebutuhan");
+$alternatif_query = mysqli_query($con, "SELECT * FROM tb_kebutuhan WHERE id_sekolah = '$id_login'");
 ?>
 
 
@@ -9,7 +9,7 @@ $alternatif_query = mysqli_query($con, "SELECT * FROM tb_kebutuhan");
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Analisis Kebutuhan Sekolah</h5>
-                    <a href="?page=alternatif&act=add" class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Tambah</a>
+                    <!-- <a href="?page=alternatif&act=add" class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Kebutuhan</a> -->
                 </div>
                 <div class="card-body table-responsive">
                     <table class="table table-striped" id="table1">
@@ -20,7 +20,7 @@ $alternatif_query = mysqli_query($con, "SELECT * FROM tb_kebutuhan");
                                 <th rowspan="2">Nama Sekolah</th>
                                 <th rowspan="2">Kecamatan</th>
                                 <th colspan="7" class="text-center">Kebutuhan Guru</th>
-                                <th rowspan="2">Opsi</th>
+                                <!-- <th rowspan="2">Opsi</th> -->
                             </tr>
                             <tr>
                                 <th>Matematika</th>
@@ -34,11 +34,12 @@ $alternatif_query = mysqli_query($con, "SELECT * FROM tb_kebutuhan");
                         </thead>
                         <tbody>
                             <?php
-                            $no = 1;
                             while ($row = mysqli_fetch_assoc($alternatif_query)) {
                             ?>
                                 <tr class="text-center">
-                                    <td><?= $no++; ?></td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" href="?page=kebutuhan&act=edit&id=<?= $row['id_sekolah'] ?>"><i class="far fa-edit"></i> Usulan</a>
+                                    </td>
                                     <td><?= htmlspecialchars($row['npsn'] ?? ''); ?></td>
                                     <td><?= htmlspecialchars($row['nama_sekolah'] ?? ''); ?></td>
                                     <td><?= htmlspecialchars($row['kecamatan'] ?? ''); ?></td>
@@ -49,10 +50,8 @@ $alternatif_query = mysqli_query($con, "SELECT * FROM tb_kebutuhan");
                                     <td><?= htmlspecialchars($row['guru_ipa'] ?? ''); ?></td>
                                     <td><?= htmlspecialchars($row['guru_ips'] ?? ''); ?></td>
                                     <td><?= htmlspecialchars($row['guru_seni_budaya'] ?? ''); ?></td>
-                                    <td>
-                                        <a class="btn btn-info btn-sm" href="?page=alternatif&act=edit&id=<?= $row['id_alternatif'] ?>"><i class="far fa-edit"></i> Ubah</a>
-                                        <a class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ??')" href="?page=alternatif&act=del&id=<?= $row['id_alternatif'] ?>"><i class="fas fa-trash"></i> Hapus</a>
-                                    </td>
+                                    <!-- <td>
+									</td> -->
                                 </tr>
                             <?php
                             }
