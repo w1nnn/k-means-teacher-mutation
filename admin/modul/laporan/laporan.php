@@ -160,9 +160,13 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>NIP</th>
                                             <th>Nama Guru</th>
-                                            <th>Tahun Evaluasi</th>
-                                            <th>Opsi</th>
+                                            <th>Satuan Pendidikan</th>
+                                            <th>Jabatan</th>
+                                            <th>Masa Kerja</th>
+                                            <th>Jam Kerja</th>
+                                            <th>Foto</th>
                                         </tr>
                                     </thead>
                                     <tbody>
