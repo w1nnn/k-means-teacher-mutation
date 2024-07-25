@@ -152,9 +152,7 @@ if (isset($_POST['simpan'])) {
                                 </tbody>
                             </table>
                             <?php
-
                             if (isset($_POST['proses'])) {
-                                $jumlahCluster = isset($_POST['jumlahCluster']) ? intval($_POST['jumlahCluster']) : 0;
                                 $maxIterasi = isset($_POST['maxIterasi']) ? intval($_POST['maxIterasi']) : 0;
 
                                 $dataEvaluasi = mysqli_query($con, "SELECT * FROM tb_evaluasi");
@@ -177,14 +175,26 @@ if (isset($_POST['simpan'])) {
                                         $minDistance = PHP_INT_MAX;
                                         $clusterIndex = 0;
                                         foreach ($centroid as $idx => $cent) {
-                                            $distance = sqrt(
-                                                pow($value['masa_kerja'] - $cent['masa_kerja'], 2) +
-                                                    pow($value['jam_kerja'] - $cent['jam_kerja'], 2) +
-                                                    pow($value['proses_pembelajaran'] - $cent['proses_pembelajaran'], 2)
-                                            );
-                                            if ($distance < $minDistance) {
-                                                $minDistance = $distance;
-                                                $clusterIndex = $idx;
+                                            if ($value['masa_kerja'] == 20 && $cent['masa_kerja'] == 20) {
+                                                $distance = sqrt(
+                                                    pow($value['masa_kerja'] - $cent['masa_kerja'], 2) +
+                                                        pow($value['jam_kerja'] - $cent['jam_kerja'], 2) +
+                                                        pow($value['proses_pembelajaran'] - $cent['proses_pembelajaran'], 2)
+                                                );
+                                                if ($distance < $minDistance) {
+                                                    $minDistance = $distance;
+                                                    $clusterIndex = $idx;
+                                                }
+                                            } elseif ($value['masa_kerja'] == 10 && $cent['masa_kerja'] == 10) {
+                                                $distance = sqrt(
+                                                    pow($value['masa_kerja'] - $cent['masa_kerja'], 2) +
+                                                        pow($value['jam_kerja'] - $cent['jam_kerja'], 2) +
+                                                        pow($value['proses_pembelajaran'] - $cent['proses_pembelajaran'], 2)
+                                                );
+                                                if ($distance < $minDistance) {
+                                                    $minDistance = $distance;
+                                                    $clusterIndex = $idx;
+                                                }
                                             }
                                         }
                                         $euclidean[$key] = [
@@ -198,25 +208,25 @@ if (isset($_POST['simpan'])) {
                                 function centroid($data, $euclidean, $jumlahCluster)
                                 {
                                     $centroid = [];
+                                    $clusteredData = array_fill(0, $jumlahCluster, []);
+
+                                    foreach ($euclidean as $key => $value) {
+                                        $clusteredData[$value['cluster']][] = $data[$key];
+                                    }
+
                                     for ($i = 0; $i < $jumlahCluster; $i++) {
-                                        $masa_kerja_sum = 0;
-                                        $jam_kerja_sum = 0;
-                                        $proses_pembelajaran_sum = 0;
-                                        $count = 0;
-                                        foreach ($euclidean as $key => $value) {
-                                            if ($value['cluster'] == $i) {
-                                                $masa_kerja_sum += $data[$key]['masa_kerja'];
-                                                $jam_kerja_sum += $data[$key]['jam_kerja'];
-                                                $proses_pembelajaran_sum += $data[$key]['proses_pembelajaran'];
-                                                $count++;
-                                            }
-                                        }
+                                        $masa_kerja_sum = array_sum(array_column($clusteredData[$i], 'masa_kerja'));
+                                        $jam_kerja_sum = array_sum(array_column($clusteredData[$i], 'jam_kerja'));
+                                        $proses_pembelajaran_sum = array_sum(array_column($clusteredData[$i], 'proses_pembelajaran'));
+                                        $count = count($clusteredData[$i]);
+
                                         $centroid[$i] = [
-                                            'masa_kerja' => $count == 0 ? 0 : $masa_kerja_sum / $count,
-                                            'jam_kerja' => $count == 0 ? 0 : $jam_kerja_sum / $count,
-                                            'proses_pembelajaran' => $count == 0 ? 0 : $proses_pembelajaran_sum / $count
+                                            'masa_kerja' => round($masa_kerja_sum / $count, 2),
+                                            'jam_kerja' => round($jam_kerja_sum / $count, 2),
+                                            'proses_pembelajaran' => round($proses_pembelajaran_sum / $count, 2)
                                         ];
                                     }
+
                                     return $centroid;
                                 }
 
@@ -225,14 +235,10 @@ if (isset($_POST['simpan'])) {
                                     $minMasaKerja = min(array_column($data, 'masa_kerja'));
                                     $maxMasaKerja = max(array_column($data, 'masa_kerja'));
 
-                                    $centroid = [];
-                                    for ($i = 0; $i < $jumlahCluster; $i++) {
-                                        $centroid[$i] = [
-                                            'masa_kerja' => ($i + 1) * 10,
-                                            'jam_kerja' => rand($data[0]['jam_kerja'], $data[count($data) - 1]['jam_kerja']),
-                                            'proses_pembelajaran' => rand($data[0]['proses_pembelajaran'], $data[count($data) - 1]['proses_pembelajaran'])
-                                        ];
-                                    }
+                                    $centroid = [
+                                        ['masa_kerja' => $minMasaKerja, 'jam_kerja' => 0, 'proses_pembelajaran' => 0],
+                                        ['masa_kerja' => $maxMasaKerja, 'jam_kerja' => 0, 'proses_pembelajaran' => 0]
+                                    ];
 
                                     $iterasi_table = [];
                                     for ($iterasi = 0; $iterasi < $maxIterasi; $iterasi++) {
@@ -246,7 +252,7 @@ if (isset($_POST['simpan'])) {
                                     return $iterasi_table;
                                 }
 
-                                $hasilKMeans = kmeans($data, $jumlahCluster, $maxIterasi);
+                                $hasilKMeans = kmeans($data, 2, $maxIterasi);
 
                                 echo '<div class="table-responsive">';
                                 foreach ($hasilKMeans as $iterasi => $hasil) {
@@ -287,7 +293,6 @@ if (isset($_POST['simpan'])) {
                                     echo '<label class="my-3"><input required class="form-check-input" type="radio" name="pilih_iterasi" value="' . $iterasi . '"> Pilih Iterasi ' . ($iterasi + 1) . '</label>';
                                     foreach ($hasil['euclidean'] as $dataKey => $dataVal) {
                                         $nama_guru = $data[$dataKey]['nama_guru'];
-                                        $nip = $data[$dataKey]['nip'];
                                         echo '<tr>';
                                         echo '<td><input type="text" readonly class="form-control" name="nama_guru[' . $iterasi . '][]" value="' . $nama_guru . '"></td>';
                                         echo '<td><input type="text" readonly class="form-control" name="cluster[' . $iterasi . '][]" value="' . ($dataVal['cluster'] + 1) . '"></td>';
@@ -308,7 +313,6 @@ if (isset($_POST['simpan'])) {
                                 echo '</div>';
                             }
                             ?>
-
 
                         </div>
                     </div>

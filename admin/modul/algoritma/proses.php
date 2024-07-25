@@ -55,6 +55,9 @@ if (isset($_POST['saveHasilEvaluasi'])) {
             <tr>
                 <td style="text-align: left;"><?= $data['nama_guru']; ?></td>
                 <td><?= $data['masa_kerja']; ?></td>
+                <?php
+                var_dump($data['masa_kerja']);
+                ?>
                 <td><?= $data['jam_kerja']; ?></td>
                 <td><?= $data['proses_pembelajaran']; ?></td>
             </tr>
