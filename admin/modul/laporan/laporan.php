@@ -63,6 +63,12 @@
                 border-bottom: none;
             }
         }
+
+        @media print {
+            @page {
+                size: landscape;
+            }
+        }
     </style>
 </head>
 
@@ -228,7 +234,7 @@
                                 }
                                 ?>
 
-                                <h5 class="mt-5">Total</h5>
+                                <h5 class="mt-5">Detail Evaluasi</h5>
                                 <table class="table table-striped mt-3" style="text-align: center; width: 100%;">
                                     <thead>
                                         <tr>
@@ -251,6 +257,65 @@
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
+
+                                <?php
+
+                                $query = "SELECT 
+                                   npsn,
+                                   nama_sekolah,
+                                   SUM(guru_matematika) AS matematika,
+                                   SUM(guru_penjaskes) AS penjaskes,
+                                   SUM(guru_bahasa_indonesia) AS bahasa_indonesia,
+                                   SUM(guru_bahasa_ingris) AS bahasa_inggris,
+                                   SUM(guru_ipa) AS ipa,
+                                   SUM(guru_ips) AS ips,
+                                   SUM(guru_seni_budaya) AS seni_budaya,
+                                   SUM(guru_agama) AS agama
+                               FROM tb_kebutuhan
+                               GROUP BY npsn, nama_sekolah";
+
+                                $result = mysqli_query($con, $query);
+
+                                if ($result) {
+                                    $available = 0;
+                                    echo '<h5 class="mt-5 text-center">Kebutuhan Sekolah</h5>';
+                                    echo '<div class="table-responsive"><table class="table mt-5 table-striped table-sm">';
+                                    echo '<thead><tr><th>Sekolah</th><th>Jumlah Kebutuhan</th><th>Guru Matematika</th><th>Guru Penjaskes</th><th>Guru Bahasa Indonesia</th><th>Guru Bahasa Inggris</th><th>Guru IPA</th><th>Guru IPS</th><th>Guru Seni Budaya</th><th>Guru Agama</th></tr></thead><tbody>';
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        $matematika = $row['matematika'] > 0 ? $row['matematika'] : "";
+                                        $penjaskes = $row['penjaskes'] > 0 ? $row['penjaskes'] : "";
+                                        $bahasa_indonesia = $row['bahasa_indonesia'] > 0 ? $row['bahasa_indonesia'] : "";
+                                        $bahasa_inggris = $row['bahasa_inggris'] > 0 ? $row['bahasa_inggris'] : "";
+                                        $ipa = $row['ipa'] > 0 ? $row['ipa'] : "";
+                                        $ips = $row['ips'] > 0 ? $row['ips'] : "";
+                                        $seni_budaya = $row['seni_budaya'] > 0 ? $row['seni_budaya'] : "";
+                                        $agama = $row['agama'] > 0 ? $row['agama'] : "";
+
+                                        // Menghitung jumlah kebutuhan
+                                        $jumlah_kebutuhan = $row['matematika'] + $row['penjaskes'] + $row['bahasa_indonesia'] + $row['bahasa_inggris'] + $row['ipa'] + $row['ips'] + $row['seni_budaya'] + $row['agama'];
+
+                                        if ($matematika || $penjaskes || $bahasa_indonesia || $bahasa_inggris || $ipa || $ips || $seni_budaya || $agama) {
+                                            echo '<tr>';
+                                            echo '<td>' . $row['nama_sekolah'] . '</td>';
+                                            echo '<td>' . $jumlah_kebutuhan . '</td>';
+                                            echo '<td>' . $matematika . '</td>';
+                                            echo '<td>' . $penjaskes . '</td>';
+                                            echo '<td>' . $bahasa_indonesia . '</td>';
+                                            echo '<td>' . $bahasa_inggris . '</td>';
+                                            echo '<td>' . $ipa . '</td>';
+                                            echo '<td>' . $ips . '</td>';
+                                            echo '<td>' . $seni_budaya . '</td>';
+                                            echo '<td>' . $agama . '</td>';
+                                            echo '</tr>';
+                                            $available++;
+                                        }
+                                    }
+                                    echo '</tbody></table></div>';
+                                } else {
+                                    echo "Error: " . mysqli_error($con);
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
