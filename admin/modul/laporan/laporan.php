@@ -193,6 +193,64 @@
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
+
+                                <?php $no = 1; ?>
+                                <?php
+                                $jabatanData = [];
+
+                                $dataEvaluasi = mysqli_query($con, "SELECT nama_guru, cluster FROM tb_hasil_evaluasi");
+                                foreach ($dataEvaluasi as $dE) {
+                                    $namaGuru = htmlspecialchars($dE['nama_guru']);
+                                    $cluster = $dE['cluster'];
+
+                                    $dataGuru = mysqli_query($con, "SELECT jabatan FROM tb_guru WHERE nama_guru = '$namaGuru'");
+                                    $guruData = mysqli_fetch_assoc($dataGuru);
+
+                                    if ($guruData) {
+                                        $jabatan = $guruData['jabatan'];
+
+                                        if (!isset($jabatanData[$jabatan])) {
+                                            $jabatanData[$jabatan] = [
+                                                'total' => 0,
+                                                'layak_mutasi' => 0,
+                                                'tidak_layak_mutasi' => 0
+                                            ];
+                                        }
+
+                                        $jabatanData[$jabatan]['total']++;
+
+                                        if ($cluster == '1') {
+                                            $jabatanData[$jabatan]['layak_mutasi']++;
+                                        } else {
+                                            $jabatanData[$jabatan]['tidak_layak_mutasi']++;
+                                        }
+                                    }
+                                }
+                                ?>
+
+                                <h5 class="mt-5">Total</h5>
+                                <table class="table table-striped mt-3" style="text-align: center; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Jabatan</th>
+                                            <th>Jumlah Data Evaluasi</th>
+                                            <th>Layak Mutasi</th>
+                                            <th>Tidak Layak Mutasi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($jabatanData as $jabatan => $data) : ?>
+                                            <tr>
+                                                <td><?php echo $no++; ?></td>
+                                                <td><?php echo htmlspecialchars($jabatan); ?></td>
+                                                <td><?php echo $data['total']; ?></td>
+                                                <td><?php echo $data['layak_mutasi']; ?></td>
+                                                <td><?php echo $data['tidak_layak_mutasi']; ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

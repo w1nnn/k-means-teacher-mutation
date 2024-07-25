@@ -8,11 +8,24 @@
                     </div>
                     <div class="card-body">
                         <form action="?page=laporan&act=tahun" method="POST">
-                            <div class="input-group mb-3" style="width: 300px;">
-                                <input type="date" class="form-control flatpickr-no-config" placeholder="Pilih Tahun" aria-label="Example text with button addon" aria-describedby="button-addon1" name="tahun">
-                                <button name="btn" class="btn btn-info btn-sm" type="submit" id="button-addon1">Cetak Tahun</button>
+                            <div class="input-group mb-3" style="max-width: 300px;">
+                                <select class="form-control" name="tahun">
+                                    <?php
+                                    $currentYear = date('Y');
+                                    $years = range(2001, $currentYear);
+                                    $years = array_reverse($years);
+                                    ?>
+                                    <option value="">Select Year</option>
+                                    <?php foreach ($years as $year) : ?>
+                                        <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-info" type="submit" name="btn">Tampilkan</button>
+                                </div>
                             </div>
                         </form>
+
                         <?php
                         $dataEvaluasi = mysqli_query($con, "SELECT * FROM tb_hasil_evaluasi ORDER BY tahun_evaluasi ASC");
 
